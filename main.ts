@@ -8,6 +8,13 @@ if (ENTRY.length < 1 || ENTRY.length > 240) {
   process.exit(1);
 }
 
+// A line made of nothing but spaces would slip past the length check
+// while saying nothing at all; refuse it so the entry always carries
+// real words.
+if (ENTRY.trim().length === 0) {
+  process.exit(1);
+}
+
 const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? "output";
 mkdirSync(outputDir, { recursive: true });
 writeFileSync(join(outputDir, "entry.txt"), ENTRY, "utf8");
